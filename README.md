@@ -154,3 +154,49 @@ export { asyncHandler };
  -->
 
 # utils > ApiError.js
+
+<!--
+class ApiError extends Error {
+  constructor(
+    statusCode,
+    message = "Something went wrong",
+    errors = [],
+    stack = ""
+  ) {
+    super(message);
+    this.statusCode = statusCode;
+    this.data = null;
+    this.message = message;
+    this.success = false;
+    this.errors = errors;
+
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+}
+
+export { ApiError };
+
+ -->
+
+# utils > ApiResponse.js
+
+<!--
+ class ApiResponse {
+  constructor(statusCode, data, message = "Success") {
+    this.statusCode = statusCode;
+    this.data = data;
+    this.message = message;
+    this.success = statusCode < 400;
+  }
+}
+ -->
+
+# User and Video model with hooks and JWT
+- user.models.js and video.models.js
+- npm i mongoose-aggregate-paginate-v2
+- npm i bcryptjs
+- npm i jsonwebtoken
