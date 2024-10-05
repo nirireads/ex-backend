@@ -92,3 +92,65 @@ connectDB(); -->
 
 - package.json > "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
 - npm run dev
+
+# Step 3: Custom API Response and Error Handeling
+
+- app.js
+<!-- import express from "express";
+const app = express();
+export { app }; -->
+
+- index.js
+<!-- connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server is running at port ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log("MongoDB Connection Failed!!", err);
+  }); -->
+
+- express API DOCS [request.params || request.body || request.cookie]
+
+# npm i cookie-parser cors
+
+- use app.use when using middlewares
+- app.js config.
+<!-- 
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+const app = express();
+
+app.use(
+cors({
+origin: process.env.CORS_ORIGIN,
+credentials: true,
+})
+);
+
+app.use(express.json({ limit: "16kb" }));
+
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+
+app.use(express.static("public"));
+
+app.use(cookieParser());
+-->
+
+# utils > asyncHandler.js
+
+<!--
+const asyncHandler = (requestHandler) => {
+  (req, res, next) => {
+    Promise.resolve(requestHandler(req, res, next)).catch((error) =>
+      next(error)
+    );
+  };
+};
+
+export { asyncHandler };
+ -->
+
+# utils > ApiError.js
