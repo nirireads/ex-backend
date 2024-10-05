@@ -1,6 +1,8 @@
 # Learning Express Backend
 
-<!-- steps to setup inital project -->
+<!--  -->
+
+# Step1 : Setup Initial Project
 
 - npm init
 - touch readme.md
@@ -15,3 +17,78 @@
 - touch .prettierrc {"singleQuote": false,"bracketSpacing": true,"tabWidth": 2,"trailingComma": "es5","semi": true}
 - touch .prettierignore [/.vscode /node_modules ./dist *.env .env .env.*]
 
+<!--  -->
+
+# Step 2: Connect Database in MERN with debugging
+
+- mongodb atlas [shared db]
+- create project in mongodb atlas
+- create user in database access [password + readWriteAnyDB]
+- create ip in network access
+- goto project > connect > compass > getLink
+- .env > PORT, MONGODB_URL+password
+- constants.js > export const DB_NAME = "videotube";
+- npm i dotenv mongoose express
+- to connect db always use try/catch and async/await
+
+# index.js -> type: all code inside index.js
+
+<!-- import mongoose from "mongoose";
+import { DB_NAME } from "./constants";
+
+import express from "express";
+const app = express();
+
+// using IIFE
+(async () => {
+try {
+    await mongoose.connect(`${process.env.MONGODB_URL}/${DB_NAME}`);
+    app.on("error", (error) => {
+    console.log("Error:", error);
+    throw error;
+});
+    app.listen(process.env.PORT, () => {
+      console.log(`App iis listening on port ${process.env.PORT}`);
+    });
+} catch (error) {
+    console.error("ERROR:", error);
+    throw error;
+}
+})(); -->
+
+# cd db > touch index.js -> connectDB
+
+<!-- import mongoose from "mongoose";
+import { DB_NAME } from "../constants";
+
+const connectDB = async () => {
+try {
+const connectionInstance = await mongoose.connect(
+`${process.env.MONGODB_URL}/${DB_NAME}`
+);
+
+    console.log(
+      `\nMongoDB  Connected !! DB HOST: ${connectionInstance.connection.host}`
+    );
+
+} catch (error) {
+console.error("MongoDB Connection Error", error);
+process.exit(1);
+}
+};
+
+export default connectDB; -->
+
+# index.js > dotnet config + connectDB
+
+<!-- import dotenv from "dotenv";
+import connectDB from "./db";
+
+dotenv.config({
+  path: "./env",
+});
+
+connectDB(); -->
+
+- package.json > "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
+- npm run dev
