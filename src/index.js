@@ -22,7 +22,26 @@ connectDB()
     console.log("MongoDB Connection Failed!!", err);
   });
 
-/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
 // type: all code inside index.js
 import express from "express";
 const app = express();

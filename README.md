@@ -196,7 +196,26 @@ export { ApiError };
  -->
 
 # User and Video model with hooks and JWT
+
 - user.models.js and video.models.js
 - npm i mongoose-aggregate-paginate-v2
 - npm i bcryptjs
 - npm i jsonwebtoken
+- made some function inside the user.models.js
+  - for hasing password, comparing password,
+  - generating access and refresh token
+
+# Upload FIle in Backend | MULTER
+
+- npm i cloudinary
+- npm i multer
+- multer takes the file upload from the form and store it in our server for temporary purpose
+- then it takes file form temp. to upload in cloudinary
+- utils > cloudinary.js, configured cloudinary upload
+- middlewares > multer.middleware.js
+
+
+# Routing & Controllers
+- user.controller.js > registerUser
+- user.route.js > 
+- app.js > import user route
