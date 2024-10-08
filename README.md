@@ -219,3 +219,6 @@ export { ApiError };
 - user.controller.js > registerUser
 - user.route.js > 
 - app.js > import user route
+
+# Logic Building / Resgister Controller
+- user.controller.js  
