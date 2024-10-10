@@ -4,27 +4,20 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const generateAccessTokenAndRefreshToken = async (userId) => {
+const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    // refresh token is also stored in db
     user.refreshToken = refreshToken;
-    // before saving refresh token
-    // it also validates if it contains all other fields
-    // so validate before save, removes bug
     await user.save({ validateBeforeSave: false });
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return { accessToken, refreshToken };
   } catch (error) {
     throw new ApiError(
       500,
-      "Something went wrong, while generating refresh and access token."
+      "Something went wrong while generating referesh and access token"
     );
   }
 };
@@ -120,7 +113,7 @@ const loginUser = asyncHandler(async (req, res) => {
   //  req body -> data
   const { username, email, password } = req.body;
 
-  if (!username || !email) {
+  if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
 
@@ -141,11 +134,12 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   // generate access and refresh token
-  const { accessToken, refreshToken } =
-    await generateAccessTokenAndRefreshToken(user._id);
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
 
   //  return secure cookies
-  const loggedInUser = User.findById(user._id).select(
+  const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
 
@@ -161,16 +155,19 @@ const loginUser = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(
       // incase if frontend dev want to save themself
-      new ApiResponse(200, {
-        loggedInUser,
-        accessToken,
-        refreshToken,
-      }),
-      "User logged in successfully"
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
+        },
+        "User logged in successfully"
+      )
     );
 });
 
-const logoutUser = asyncHandler(async (req, red) => {
+const logoutUser = asyncHandler(async (req, res) => {
   // problem to get user
   await User.findByIdAndUpdate(
     req.user._id,
